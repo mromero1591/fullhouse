@@ -1,13 +1,17 @@
 import { useEffect, useState } from "react";
 import Card from "./components/deck";
 import { fetchFreshDeck } from "./utils/api";
-import { isFullHouse, hasPair, replaceNonPaired } from "./utils/deck";
+import {
+  isFullHouse,
+  findAllPairsInHand,
+  replaceNonPaired,
+} from "./utils/deck";
 import { delay } from "./utils/utils";
 
 function App() {
   const [deck, setDeck] = useState({
     deckID: "rwlqd99vigst",
-    remaining: 0,
+    remainingCards: 0,
     hand: [],
   });
   const [running, setRunning] = useState(false);
@@ -32,12 +36,12 @@ function App() {
     setDeck(newDeck);
 
     while (!isFullHouse(newDeck.hand)) {
-      if (newDeck.remaining === 0) {
+      if (newDeck.remainingCards === 0) {
         break;
       }
 
       let updatedDeck = { ...newDeck };
-      updatedDeck.hand = hasPair(updatedDeck.hand);
+      updatedDeck.hand = findAllPairsInHand(updatedDeck.hand);
 
       let update = await replaceNonPaired(updatedDeck.deckID, updatedDeck.hand);
       newDeck = {

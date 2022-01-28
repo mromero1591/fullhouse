@@ -11,7 +11,7 @@ export const fetchFreshDeck = async (deckID) => {
 
   let tempDeck = {
     deckID: resp.data.deck_id,
-    remaining: drawResp.remaining,
+    remainingCards: drawResp.remaining,
     hand: drawResp.cards,
   };
 
@@ -39,6 +39,6 @@ export const drawCards = async (deckID, count) => {
 
   return {
     cards: newCards,
-    remaining: resp.data.remaining,
+    remainingCards: resp.data.remaining,
   };
 };

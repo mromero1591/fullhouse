@@ -20,7 +20,7 @@ export const isFullHouse = (hand) => {
   return threeOfAKindFirst || twoOfAKindFirst;
 };
 
-export const hasPair = (hand) => {
+export const findAllPairsInHand = (hand) => {
   let existMap = new Map();
   let hasPairHand = hand;
 
@@ -73,7 +73,7 @@ export const replaceNonPaired = async (deckID, hand) => {
   }
 
   let update = {
-    remaining: resp.remaining,
+    remainingCards: resp.remaining,
     hand: newHand,
   };
 
