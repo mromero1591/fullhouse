@@ -80,7 +80,8 @@ function App() {
       }
 
       let updatedGame = { ...newGame };
-      updatedGame = hasPair(updatedGame);
+      updatedGame.hand = hasPair(updatedGame.hand);
+
       updatedGame = await replaceNonPaired(updatedGame);
       //updatedGame.hand.sort(sortCards);
       newGame = updatedGame;
@@ -117,9 +118,9 @@ function App() {
     return threeOfAKindFirst || twoOfAKindFirst;
   };
 
-  const hasPair = (updatedGame) => {
+  const hasPair = (hand) => {
     let existMap = new Map();
-    let hasPairHand = updatedGame.hand;
+    let hasPairHand = hand;
 
     for (let i = 0; i < hasPairHand.length; i++) {
       let card = hasPairHand[i];
@@ -145,10 +146,7 @@ function App() {
       }
     }
 
-    return {
-      ...updatedGame,
-      hand: hasPairHand,
-    };
+    return hasPairHand;
   };
 
   const replaceNonPaired = async (game) => {
