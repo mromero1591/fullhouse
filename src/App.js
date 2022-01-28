@@ -51,7 +51,7 @@ function App() {
 
       setDeck(newDeck);
 
-      await delay(2);
+      //await delay(2);
     }
 
     if (isFullHouse(newDeck.hand)) {
@@ -66,7 +66,10 @@ function App() {
   return (
     <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 lg:mt-36">
       <h2 className="text-2xl font-extrabold text-gray-900 lg:mb-12">
-        Full House
+        Full House -{" "}
+        <span className="text-xl font-medium">
+          {deck.remainingCards} cards remaining
+        </span>
       </h2>
       <Card hand={deck.hand} isFullHouse={handIsFullHouse} />
       <div className="flex justify-end mt-12">
