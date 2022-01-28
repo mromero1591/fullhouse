@@ -33,11 +33,7 @@ export const findAllPairsInHand = (hand) => {
       if (cardFromMap.count < 3) {
         hasPairHand[i].keep = true;
         hasPairHand[cardFromMap.loc].keep = true;
-        let updatedCardFromMap = {
-          ...cardFromMap,
-          count: cardFromMap.count + 1,
-        };
-        existMap.set(card.value, updatedCardFromMap);
+        cardFromMap.count += 1;
       }
     } else {
       existMap.set(card.value, {
