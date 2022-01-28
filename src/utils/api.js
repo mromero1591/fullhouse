@@ -1,45 +1,26 @@
 import axios from "axios";
 import { determinCardValue } from "./utils";
 
+//fetchFresDeck: take in a deckID and reshufles the deck. placing all cards back into the deck
+//returns: the deck with a new full hand.
 export const fetchFreshDeck = async (deckID) => {
   let url = `https://deckofcardsapi.com/api/deck/${deckID}/shuffle/`;
   let resp = await axios.get(url);
 
-  //draw first 5 cards
-  let drawResp = await drawFullHand(deckID);
+  let drawResp = await drawCards(deckID, 5);
 
   let tempDeck = {
     deckID: resp.data.deck_id,
     remaining: drawResp.remaining,
-    hand: drawResp.hand,
+    hand: drawResp.cards,
   };
 
   return tempDeck;
 };
 
-export const drawFullHand = async (deckID) => {
-  let url = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=5`;
-
-  let resp = await axios.get(url);
-
-  let hand = [];
-
-  for (const card of resp.data.cards) {
-    hand.push({
-      image: card.image,
-      value: determinCardValue(card.value),
-      keep: false,
-    });
-  }
-
-  return {
-    hand: hand,
-    remaining: resp.data.remaining,
-  };
-};
-
-export const drawCards = async (gameId, count) => {
-  let url = `https://deckofcardsapi.com/api/deck/${gameId}/draw/?count=${count}`;
+//drawFullHand: using a deckId, a count this will draw n new cards from the given deck.
+export const drawCards = async (deckID, count) => {
+  let url = `https://deckofcardsapi.com/api/deck/${deckID}/draw/?count=${count}`;
 
   let resp = await axios.get(url);
 
