@@ -46,7 +46,7 @@ function App() {
       };
       setDeck(updatedDeck);
 
-      await delay(1);
+      await delay(2);
     }
 
     if (isFullHouse(newDeck.hand)) {
