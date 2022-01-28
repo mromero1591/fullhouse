@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Card from "./components/deck";
 import { drawCards, fetchFreshDeck } from "./utils/api";
 import { isFullHouse, hasPair } from "./utils/deck";
+import { delay } from "./utils/utils";
 
 function App() {
   const [deck, setDeck] = useState({
@@ -39,7 +40,7 @@ function App() {
       newDeck = updatedDeck;
       setDeck(updatedDeck);
 
-      // await delay(1);
+      await delay(1);
     }
 
     if (isFullHouse(newDeck.hand)) {
