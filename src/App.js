@@ -10,24 +10,27 @@ function App() {
     remaining: 0,
     hand: [],
   });
+  const [running, setRunning] = useState(false);
+  const [handIsFullHouse, setHandIsFullHouse] = useState(false);
 
-  const [gameRunning, setGameRunning] = useState(false);
-  const [isFullHouseClass, setIsFullHouseClass] = useState(false);
   useEffect(() => {
     async function setup() {
-      let newGame = await fetchFreshDeck(deck.deckID);
+      let newDeck = await fetchFreshDeck(deck.deckID);
 
-      setDeck(newGame);
+      setDeck(newDeck);
     }
 
     setup();
   }, []);
 
-  const runGame = async () => {
-    setGameRunning(true);
+  //run: kicks off program to find a full house and in a 52 deck of cards.
+  const run = async () => {
+    setRunning(true);
+    setHandIsFullHouse(false);
+
     let newDeck = await fetchFreshDeck(deck.deckID);
     setDeck(newDeck);
-    setIsFullHouseClass(false);
+
     while (!isFullHouse(newDeck.hand)) {
       if (newDeck.remaining === 0) {
         break;
@@ -36,72 +39,74 @@ function App() {
       let updatedDeck = { ...newDeck };
       updatedDeck.hand = hasPair(updatedDeck.hand);
 
-      updatedDeck = await replaceNonPaired(updatedDeck);
-      newDeck = updatedDeck;
+      let update = await replaceNonPaired(updatedDeck.deckID, updatedDeck.hand);
+      newDeck = {
+        ...updatedDeck,
+        ...update,
+      };
       setDeck(updatedDeck);
 
       await delay(1);
     }
 
     if (isFullHouse(newDeck.hand)) {
-      setIsFullHouseClass(true);
+      setHandIsFullHouse(true);
     } else {
-      setIsFullHouseClass(false);
+      setHandIsFullHouse(false);
     }
 
-    setGameRunning(false);
+    setRunning(false);
   };
 
-  const replaceNonPaired = async (game) => {
+  const replaceNonPaired = async (deckID, hand) => {
     let cardsToDiscard = [];
 
-    for (let i = 0; i < game.hand.length; i++) {
-      let val = game.hand[i];
+    for (let i = 0; i < hand.length; i++) {
+      let val = hand[i];
       if (!val.keep) {
         cardsToDiscard.push(i);
       }
     }
 
     let newCardCount = cardsToDiscard.length;
-    let resp = await drawCards(game.deckID, newCardCount);
+    let resp = await drawCards(deckID, newCardCount);
 
-    let newHand = game.hand;
+    let newHand = hand;
     //replace cards
     for (let i = 0; i < resp.cards.length; i++) {
       let location = cardsToDiscard[i];
       newHand[location] = resp.cards[i];
     }
 
-    let updatedGame = {
-      ...game,
+    let update = {
       remaining: resp.remaining,
       hand: newHand,
     };
 
-    return updatedGame;
+    return update;
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 lg:mt-36">
+    <div className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 lg:mt-36">
       <h2 className="text-2xl font-extrabold text-gray-900 lg:mb-12">
         Full House
       </h2>
-      <Card hand={deck.hand} isFullHouse={isFullHouseClass} />
+      <Card hand={deck.hand} isFullHouse={handIsFullHouse} />
       <div className="flex justify-end mt-12">
-        {gameRunning ? (
+        {running ? (
           <button
             type="button"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
+            className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 "
           >
-            game running...
+            running...
           </button>
         ) : (
           <button
-            onClick={runGame}
+            onClick={run}
             type="button"
-            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="inline-flex items-center px-6 py-3 text-base font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            Start Game
+            Run
           </button>
         )}
       </div>
