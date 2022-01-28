@@ -11,7 +11,7 @@ export const fetchFreshDeck = async (deckID) => {
 
   let tempDeck = {
     deckID: resp.data.deck_id,
-    remainingCards: drawResp.remaining,
+    remainingCards: drawResp.remainingCards,
     hand: drawResp.cards,
   };
 

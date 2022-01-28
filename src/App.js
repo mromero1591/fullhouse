@@ -48,7 +48,8 @@ function App() {
         ...updatedDeck,
         ...update,
       };
-      setDeck(updatedDeck);
+
+      setDeck(newDeck);
 
       //await delay(2);
     }

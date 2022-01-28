@@ -69,7 +69,7 @@ export const replaceNonPaired = async (deckID, hand) => {
   }
 
   let update = {
-    remainingCards: resp.remaining,
+    remainingCards: resp.remainingCards,
     hand: newHand,
   };
 
