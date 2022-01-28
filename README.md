@@ -13,13 +13,15 @@ This repo contains the code to do the following:
 5. Once you have a full house, stop drawing cards and highlight the card images
    that belong to the full house using any kind of css styling you like
 
-## Available Scripts
+## How To Run
 
-In the project directory, you can run:
+This repo was created using a standard create-react-app. To run the program please do the following:
 
-### `npm start`
+1. clone repo
+2. run `npm i`
+3. run `npm start`
 
-Runs the app in the development mode.\
+npm start will run the appin the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
