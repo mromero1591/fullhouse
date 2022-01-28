@@ -51,7 +51,7 @@ function App() {
 
       setDeck(newDeck);
 
-      //await delay(2);
+      await delay(2);
     }
 
     if (isFullHouse(newDeck.hand)) {
