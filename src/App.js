@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Card from "./components/deck";
-import { drawCards, fetchFreshDeck } from "./utils/api";
-import { isFullHouse, hasPair } from "./utils/deck";
+import { fetchFreshDeck } from "./utils/api";
+import { isFullHouse, hasPair, replaceNonPaired } from "./utils/deck";
 import { delay } from "./utils/utils";
 
 function App() {
@@ -56,34 +56,6 @@ function App() {
     }
 
     setRunning(false);
-  };
-
-  const replaceNonPaired = async (deckID, hand) => {
-    let cardsToDiscard = [];
-
-    for (let i = 0; i < hand.length; i++) {
-      let val = hand[i];
-      if (!val.keep) {
-        cardsToDiscard.push(i);
-      }
-    }
-
-    let newCardCount = cardsToDiscard.length;
-    let resp = await drawCards(deckID, newCardCount);
-
-    let newHand = hand;
-    //replace cards
-    for (let i = 0; i < resp.cards.length; i++) {
-      let location = cardsToDiscard[i];
-      newHand[location] = resp.cards[i];
-    }
-
-    let update = {
-      remaining: resp.remaining,
-      hand: newHand,
-    };
-
-    return update;
   };
 
   return (

@@ -1,3 +1,4 @@
+import { drawCards } from "./api";
 import { sortCards } from "./utils";
 
 export const isFullHouse = (hand) => {
@@ -48,4 +49,33 @@ export const hasPair = (hand) => {
   }
 
   return hasPairHand;
+};
+
+//replaceNonPaired: will reaplce any non paried cards with new cards from the deck.
+export const replaceNonPaired = async (deckID, hand) => {
+  let cardsToDiscard = [];
+
+  for (let i = 0; i < hand.length; i++) {
+    let val = hand[i];
+    if (!val.keep) {
+      cardsToDiscard.push(i);
+    }
+  }
+
+  let newCardCount = cardsToDiscard.length;
+  let resp = await drawCards(deckID, newCardCount);
+
+  let newHand = hand;
+  //replace cards
+  for (let i = 0; i < resp.cards.length; i++) {
+    let location = cardsToDiscard[i];
+    newHand[location] = resp.cards[i];
+  }
+
+  let update = {
+    remaining: resp.remaining,
+    hand: newHand,
+  };
+
+  return update;
 };
